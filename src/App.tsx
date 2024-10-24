@@ -10,26 +10,38 @@ function App() {
   };
 
   return (
-    <div>
-      <form className={css`
-        display: flex;
-        flex-direction: column;
-      `}>
+    <div className={css`padding: 100px 200px;`}>
+      <h1>Welcome</h1>
+      <form
+        className={css`
+          display: flex;
+          flex-direction: column;
+        `}
+        onSubmit={(event: FormEvent<HTMLFormElement>) => {
+          event.preventDefault();
+          handleSubmitFiles();
+        }}
+      >
         <FileUpload
           files={files}
           onChange={(newFiles: Files[]) => {
             setFiles(newFiles);
           }}
         />
-        <button
-          type="submit"
-          onSubmit={(event: FormEvent<HTMLFormElement>) => {
-            event.preventDefault();
-            handleSubmitFiles();
-          }}
-        >
-          Submit
-        </button>
+        <div className={css`
+          display: flex;
+          justify-content: right;
+        `}>
+          <button
+            type="submit"
+            className={css`
+              margin-top: 10px;
+              cursor: pointer;
+            `}
+          >
+            Submit
+          </button>
+        </div>
       </form>
     </div>
   );

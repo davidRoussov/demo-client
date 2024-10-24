@@ -33,7 +33,7 @@ export const FileUpload = ({
         {
           isDragActive ?
           <p>Drop the file here...</p> :
-          <p>Drag and drop file here, or click to select file</p>
+          <p>Drag and drop files here, or click to select a file</p>
         }
       </div>
       {files.length > 0 && (
