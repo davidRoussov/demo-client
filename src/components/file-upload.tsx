@@ -38,7 +38,7 @@ export const FileUpload = ({
       </div>
       {files.length > 0 && (
         <div className={css`color: black; margin-top: 10px;`}>
-          <h4>File(s) to be uploaded:</h4>
+          <p>File(s) to be uploaded:</p>
           <ul className={css`padding: 0px;`}>
             {files.map((file) => (
               <li key={file.name}>
