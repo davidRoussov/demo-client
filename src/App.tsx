@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react'
+
 import { FileUpload, ValueMapping } from '@components';
 import { css } from '@emotion/css';
+import { getFileFirstMb, getFirstRowExcel, getFirstRowCsv } from '@utilities';
+import { DataType, TypeMapping } from '@types';
 
 function App() {
-  const [ files, setFiles ] = useState<File[]>([]);
+  const [ file, setFile ] = useState<File | undefined>(undefined);
   const [ loading, setLoading ] = useState(false);
-  const [ dataTypes, setDataTypes ] = useState<string[]>([]);
+  const [ dataTypes, setDataTypes ] = useState<DataType[]>([]);
+  const [ typeMappings, setTypeMappings ] = useState<TypeMapping[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -14,7 +18,38 @@ function App() {
     })();
   }, []);
 
-  const listDataTypes = async (): Promise<string[]> => {
+  useEffect(() => {
+    (async () => {
+      if (!file) {
+        return;
+      }
+
+      const firstMb = await getFileFirstMb(file);
+      const extension = file.name.split('.').pop()?.toLowerCase();
+
+      if (extension === 'csv') {
+        const firstRow = await getFirstRowCsv(firstMb);
+        if (firstRow) {
+          const newTypeMappings: TypeMapping[] = firstRow.map((column: string) => (
+            [column, undefined]
+          ));
+
+          setTypeMappings(newTypeMappings);
+        }
+      } else if (['xls', 'xlsx'].includes(extension)) {
+        const firstRow = await getFirstRowExcel(file);
+        if (firstRow) {
+          const newTypeMappings: TypeMapping[] = firstRow.map((column: string) => (
+            [column, undefined]
+          ));
+
+          setTypeMappings(newTypeMappings);
+        }
+      }
+    })();
+  }, [file]);
+
+  const listDataTypes = async (): Promise<DataType[]> => {
     setLoading(true);
 
     try {
@@ -33,38 +68,32 @@ function App() {
   };
 
   const handleSubmitFiles = async (): Promise<void> => {
-    if (files.length > 0) {
-      setLoading(true);
+    setLoading(true);
 
-      const firstFile = files[0];
+    let formData = new FormData();
+    formData.append('file', file);
 
-      let formData = new FormData();
-      formData.append('file', firstFile);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SERVER_BASE_URL}/typeconverter/uploads/`, {
+        method: 'POST',
+        body: formData,
+      });
 
-      try {
-        const response = await fetch(`${import.meta.env.VITE_SERVER_BASE_URL}/typeconverter/uploads/`, {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!response.ok) {
-          throw new Error('Upload failed');
-        }
-
-        console.info('Upload successful');
-      } catch(error) {
-        console.error('Upload failed', error);
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error('Upload failed');
       }
+
+      console.info('Upload successful');
+    } catch(error) {
+      console.error('Upload failed', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  console.log("dataTypes", dataTypes);
-
   return (
     <div className={css`padding: 100px 200px;`}>
-      <h1>Welcome</h1>
+      <h1>Welcome to type detector</h1>
       { loading ?
         <div>
           Loading...
@@ -79,15 +108,26 @@ function App() {
             handleSubmitFiles();
           }}
         >
+          <h2>Step 1: Select a CSV or Excel File</h2>
           <FileUpload
-            files={files}
+            files={file ? [ file ] : []}
             onChange={(newFiles: Files[]) => {
-              setFiles(newFiles);
+              if (newFiles.length > 0) {
+                const firstFile = newFiles[0];
+                setFile(firstFile);
+              }
             }}
           />
+          <h2>Step 2: Set types</h2>
+          <ValueMapping
+            values={typeMappings}
+            options={dataTypes}
+            onChange={(newTypeMappings: TypeMapping[]) => setTypeMappings(newTypeMappings)}
+          />
+          <h2>Step 3: Infer types</h2>
           <div className={css`
             display: flex;
-            justify-content: right;
+            justify-content: left;
           `}>
             <button
               type="submit"

@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { css } from '@emotion/css';
-import { useDropzone } from 'react-dropzone';
+import { useDropzone, DropzoneOptions } from 'react-dropzone';
 
 export const FileUpload = ({
   files,
@@ -29,7 +29,7 @@ export const FileUpload = ({
           padding: 50px 25px;
         `}
       >
-        <input {...getInputProps()} />
+        <input {...getInputProps()} accept=".csv,.xls,.xlsx"/>
         {
           isDragActive ?
           <p>Drop the file here...</p> :
@@ -38,7 +38,7 @@ export const FileUpload = ({
       </div>
       {files.length > 0 && (
         <div className={css`color: black; margin-top: 10px;`}>
-          <h4>Files to be uploaded:</h4>
+          <h4>File(s) to be uploaded:</h4>
           <ul className={css`padding: 0px;`}>
             {files.map((file) => (
               <li key={file.name}>
