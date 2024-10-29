@@ -15,7 +15,7 @@ export const ValueMapping = ({
   onChange: (newMappings: TypeMapping[]) => void;
 }) => {
   const selectOptions = [
-    { id: 0, name: SelectEmptyValue }
+    { id: 0, name: SelectEmptyValue, display_name: SelectEmptyValue }
   ].concat(options);
 
   return (
@@ -53,7 +53,7 @@ export const ValueMapping = ({
                   >
                     {selectOptions.map((option: DataType) => (
                       <option key={option.id} value={option.name}>
-                        {option.name}
+                        {option.display_name}
                       </option>
                     ))}
                   </select>
