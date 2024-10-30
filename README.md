@@ -18,29 +18,29 @@ Ensure you have the following installed on your machine:
    cd demo-client
    ```
 
-2 Install dependencies:
+2. Install dependencies:
 
    npm install
 
 
-Running the Application
+   Running the Application
 
-To start the development server, run:
-
-
- npm run dev
+   To start the development server, run:
 
 
-The application will be available at http://localhost:5173.
-
-                                 Building for Production
-
-To create an optimized production build, run:
+    npm run dev
 
 
- npm run build
+   The application will be available at http://localhost:5173.
+
+                                    Building for Production
+
+   To create an optimized production build, run:
 
 
-The output will be located in the dist directory.
+    npm run build
+
+
+   The output will be located in the dist directory.
 
 
