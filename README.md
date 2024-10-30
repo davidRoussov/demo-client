@@ -33,7 +33,7 @@ Ensure you have the following installed on your machine:
 
    The application will be available at http://localhost:5173.
 
-                                    Building for Production
+   Building for Production
 
    To create an optimized production build, run:
 
