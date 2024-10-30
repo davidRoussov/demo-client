@@ -20,7 +20,7 @@ Ensure you have the following installed on your machine:
 
 2. Install dependencies:
 
-   npm install
+   ```npm install```
 
 
    Running the Application
@@ -28,7 +28,7 @@ Ensure you have the following installed on your machine:
    To start the development server, run:
 
 
-    npm run dev
+    ```npm run dev```
 
 
    The application will be available at http://localhost:5173.
@@ -38,7 +38,7 @@ Ensure you have the following installed on your machine:
    To create an optimized production build, run:
 
 
-    npm run build
+    ```npm run build```
 
 
    The output will be located in the dist directory.
